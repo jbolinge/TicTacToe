@@ -7,11 +7,10 @@ class Board
 {
 private:
 	unsigned long int board;
-	unsigned short int spawningMove;
 public:
 	Board();
 	Board(unsigned long int);
-	Board(unsigned long int, unsigned short int);
+	Board(unsigned long int, unsigned long int);
 	virtual ~Board();
 
 	// Getter

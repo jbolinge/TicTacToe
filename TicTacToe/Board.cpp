@@ -4,18 +4,22 @@
 Board::Board()
 {
 	this->board = 0;
-	this->spawningMove = 0;
 }
 
 Board::Board(unsigned long int b)
 	:board(b)
 {
-	this->spawningMove = 0;
 }
 
-Board::Board(unsigned long int b, unsigned short int m)
-	:board(b), spawningMove(m)
-{
+Board::Board(unsigned long int b, unsigned long int m)
+	:board(b)
+{	
+	if (m) {
+		// sets move flag on bit 28
+		this->board = this->board | (0x01 << MOVE_FLAG_BIT);
+		// sets move to bits 20-24
+		this->board = this->board | (m << MOVE_SHIFT);
+	}
 }
 
 Board::~Board()
@@ -45,8 +49,13 @@ char Board::getCellChar(int cell) const
 }
 
 unsigned short int Board::getSpawningMove() const
-{
-	return this->spawningMove;
+{	
+	// if move bit is set, return bits 20-24
+	if ((this->board & (0x01 << MOVE_FLAG_BIT)) >> MOVE_FLAG_BIT) {
+		return ((this->board & (0x0F << MOVE_SHIFT)) >> MOVE_SHIFT);
+	}
+	else
+		return 0;
 }
 
 void Board::setCell(int cell, int move)

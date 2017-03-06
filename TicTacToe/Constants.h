@@ -8,6 +8,8 @@
 #define E_CHAR '-'
 #define CELL_MASK 0x03
 #define CELL_SIZE 2
+#define MOVE_SHIFT 20
+#define MOVE_FLAG_BIT 28
 
 // win for row 1, shift << 3 to go to next row
 #define WIN_P_ROW 0x00000015
