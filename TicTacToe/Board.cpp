@@ -20,13 +20,29 @@ unsigned long int Board::getBoard() const
 	return this->board;
 }
 
+unsigned short int Board::getCellVal(int cell) const
+{
+	return ((this->board >> (cell * CELL_SIZE)) & CELL_MASK);
+}
+
+char Board::getCellChar(int cell) const
+{
+	switch (this->getCellVal(cell)) {
+		case PLAYER:
+			return P_CHAR;
+		case COMPUTER:
+			return C_CHAR;
+		default:
+			return E_CHAR;
+	}
+}
 
 void Board::setCell(int cell, int move)
 {	
 	this->board = this->board | ((move) << (cell * CELL_SIZE));
 }
 
-short int Board::getMoves()
+unsigned short int Board::getMoves()
 {
 	short int t = 0;
 	for (int i = 0; i < 9; i++) {
@@ -39,23 +55,44 @@ short int Board::getMoves()
 
 void Board::print() {
 	for (int i = 0; i < 9; i++) {
-		short int t = ((this->board >> (i * CELL_SIZE)) & CELL_MASK);
-		char c;
-		if (t == PLAYER) {
-			c = P_CHAR;
-		}
-		else if (t == COMPUTER) {
-			c = C_CHAR;
-		}
-		else {
-			c = E_CHAR;
-		}
-		std::cout << c;
+		std::cout << this->getCellChar(i);
 		if (i % 3 == 2) {
 			std::cout << std::endl;
 		}
 	}
 	std::cout << std::endl;
+}
+
+unsigned short int Board::checkWinner()
+{
+	unsigned long row_temp; 
+	unsigned long col_temp;
+	// check for row and col win
+	for (int i = 0; i < 3; i++) {
+		row_temp = (this->board & ((WIN_P_ROW | WIN_C_ROW) << (i * 3 * CELL_SIZE))) >> (i * 3 * CELL_SIZE);
+		col_temp = (this->board & ((WIN_P_COL | WIN_C_COL) << (i * CELL_SIZE))) >> (i * CELL_SIZE);
+		if ((row_temp == WIN_P_ROW) || (col_temp == WIN_P_COL)){
+			return PLAYER;
+		}
+		else if ((row_temp == WIN_C_ROW) || (col_temp == WIN_C_COL)) {
+			return COMPUTER;
+		}
+	}
+	// check for diagonal win
+	row_temp = this->board & (WIN_P_DIAG_1 | WIN_C_DIAG_1);
+	col_temp = this->board & (WIN_P_DIAG_2 | WIN_C_DIAG_2);
+	if ((row_temp == WIN_P_DIAG_1) || (col_temp == WIN_P_DIAG_2)) {
+		return PLAYER;
+	}
+	else if ((row_temp == WIN_C_DIAG_1) || (col_temp == WIN_C_DIAG_2)) {
+		return COMPUTER;
+	}
+	// if no moves, CATS
+	if (!(this->hasMove())) {
+		return CELL_MASK;
+	}
+	// no winner yet
+	return EMPTY;
 }
 
 bool Board::hasMove() {

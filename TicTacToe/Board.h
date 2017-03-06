@@ -14,11 +14,14 @@ public:
 
 	// Getter
 	unsigned long int getBoard() const;
+	unsigned short int getCellVal(int) const;
+	char getCellChar(int) const;
 
 	// Methods
 	void setCell(int cell, int move);
-	short int getMoves();
+	unsigned short int getMoves();
 	bool hasMove();
 	int nextMove(short int);
 	void print();
+	unsigned short int checkWinner();
 };

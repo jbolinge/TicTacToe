@@ -10,19 +10,39 @@
 int main()
 {
 	short int moves = 0;
+	short int move = 0;
+	short int win = EMPTY;
 	int turn = PLAYER;
 	Board *board = new Board();
 	while (board->hasMove()) {
-		moves = board->getMoves();
-		board->setCell(board->nextMove(moves), turn);
+		if (turn == PLAYER) {
+			std::cout << "Enter move (1 - 9): ";
+			std::cin >> move;
+			std::cout << std::endl;
+			move--;
+		}
+		else {
+			moves = board->getMoves();
+			move = board->nextMove(moves);
+		}
+		board->setCell(move, turn);
 		board->print();
+		win = board->checkWinner();
+		if (win != EMPTY) {
+			break;
+		}
 		turn = (~turn) & CELL_MASK;
 	}
-	Board *newb = new Board(board->getBoard());
+	if (win == CELL_MASK) {
+		std::cout << "CATS" << std::endl;
+	}
+	else if (win == PLAYER) {
+		std::cout << "Player wins" << std::endl;
+	}
+	else if (win == COMPUTER) {
+		std::cout << "Computer wins" << std::endl;
+	}
 	delete board;
-	std::cout << "New board: " << std::endl;
-	newb->print();
-	delete newb;
     return 0;
 }
 
