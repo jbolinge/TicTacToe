@@ -4,10 +4,17 @@
 Board::Board()
 {
 	this->board = 0;
+	this->spawningMove = 0;
 }
 
 Board::Board(unsigned long int b)
 	:board(b)
+{
+	this->spawningMove = 0;
+}
+
+Board::Board(unsigned long int b, unsigned short int m)
+	:board(b), spawningMove(m)
 {
 }
 
@@ -35,6 +42,11 @@ char Board::getCellChar(int cell) const
 		default:
 			return E_CHAR;
 	}
+}
+
+unsigned short int Board::getSpawningMove() const
+{
+	return this->spawningMove;
 }
 
 void Board::setCell(int cell, int move)
