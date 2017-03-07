@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include "Constants.h"
 
 class Board
@@ -26,4 +27,5 @@ public:
 	int nextMove(short int);
 	void print();
 	unsigned short int checkWinner();
+	std::vector<int> getAllMoves();
 };

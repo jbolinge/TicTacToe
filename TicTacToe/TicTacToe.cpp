@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "Board.h"
+#include "AI.h"
 #include "Constants.h"
 
 #include <iostream>
@@ -14,16 +15,23 @@ int main()
 	short int win = EMPTY;
 	int turn = PLAYER;
 	Board *board = new Board();
+	AI *ai = new AI();
 	while (board->hasMove()) {
 		if (turn == PLAYER) {
-			std::cout << "Enter move (1 - 9): ";
-			std::cin >> move;
-			std::cout << std::endl;
-			move--;
+			do {
+				std::cout << "Enter move (1 - 9): ";
+				std::cin >> move;
+				std::cout << std::endl;
+				move--;
+				// Enter 10 to have ai get move
+				if (move == 9) {
+					move = ai->getMove(board, true);
+				}
+			} while (board->getCellVal(move) != EMPTY);
 		}
 		else {
-			moves = board->getMoves();
-			move = board->nextMove(moves);
+			move = ai->getMove(board, false);
+			std::cout << "Computer move: " << (move + 1) << std::endl;
 		}
 		board->setCell(move, turn);
 		board->print();
@@ -42,6 +50,7 @@ int main()
 	else if (win == COMPUTER) {
 		std::cout << "Computer wins" << std::endl;
 	}
+	delete ai;
 	delete board;
     return 0;
 }

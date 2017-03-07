@@ -116,6 +116,19 @@ unsigned short int Board::checkWinner()
 	return EMPTY;
 }
 
+std::vector<int> Board::getAllMoves()
+{	
+	unsigned short int moves = this->getMoves();
+	std::vector<int> result;
+	for (int i = 0; i < 9; i++) {
+		if ((moves & 0x01) != 0) {
+			result.push_back(i);
+		}
+		moves = moves >> 1;
+	}
+	return result;
+}
+
 bool Board::hasMove() {
 	return (this->getMoves() != EMPTY);
 }
